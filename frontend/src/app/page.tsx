@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 
 import Navbar from "@/components/navbar";
+import Reveal from "@/components/reveal";
 
 const domains = [
   {
@@ -71,20 +73,56 @@ const activities = [
   },
 ];
 
+const values = [
+  {
+    icon: Lightbulb,
+    title: "Curiosity",
+    description: "Ask questions. Explore possibilities.",
+  },
+  {
+    icon: Users,
+    title: "Community",
+    description: "Learn from people around you.",
+  },
+  {
+    icon: Code2,
+    title: "Innovation",
+    description: "Turn ideas into working solutions.",
+  },
+  {
+    icon: Rocket,
+    title: "Growth",
+    description: "Keep improving, one step at a time.",
+  },
+];
+
 export default function Home() {
   return (
-    <main className="overflow-hidden">
+    <main className="relative isolate overflow-hidden">
+      {/* AMBIENT BACKGROUND */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      >
+        <div className="absolute -right-64 -top-40 h-[650px] w-[650px] rounded-full bg-green-500/[0.08] blur-[140px]" />
+
+        <div className="absolute -left-72 top-[1050px] h-[600px] w-[600px] rounded-full bg-emerald-500/[0.06] blur-[140px]" />
+
+        <div className="absolute -right-72 top-[2500px] h-[650px] w-[650px] rounded-full bg-green-500/[0.06] blur-[150px]" />
+      </div>
+
       <Navbar />
 
       {/* HERO SECTION */}
       <section
         id="home"
-        className="relative px-6 pb-24 pt-20 lg:px-10 lg:pb-32 lg:pt-28"
+        className="relative px-6 pb-28 pt-20 lg:px-10 lg:pb-36 lg:pt-28"
       >
         <div className="pointer-events-none absolute -right-40 top-0 h-[500px] w-[500px] rounded-full bg-green-500/10 blur-[120px]" />
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-2">
-          <div>
+          {/* HERO CONTENT */}
+          <Reveal direction="left" className="relative z-10">
             <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-green-600/20 bg-green-600/10 px-4 py-2 text-sm font-medium text-green-700 dark:text-green-400">
               <span className="h-2 w-2 rounded-full bg-green-500" />
               Ramdeobaba University · Technical Community
@@ -107,18 +145,24 @@ export default function Home() {
             <div className="mt-10 flex flex-wrap gap-4">
               <Link
                 href="#about"
-                className="inline-flex items-center gap-3 rounded-xl bg-green-600 px-7 py-4 font-semibold text-white transition hover:bg-green-700"
+                className="group inline-flex items-center gap-3 rounded-xl bg-green-600 px-7 py-4 font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-green-700 hover:shadow-lg hover:shadow-green-600/20"
               >
                 Explore our club
-                <ArrowUpRight size={18} />
+                <ArrowUpRight
+                  size={18}
+                  className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+                />
               </Link>
 
               <Link
                 href="#community"
-                className="inline-flex items-center gap-3 rounded-xl border border-[var(--border)] px-7 py-4 font-semibold transition hover:bg-[var(--surface)]"
+                className="group inline-flex items-center gap-3 rounded-xl border border-[var(--border)] px-7 py-4 font-semibold transition-all duration-300 hover:-translate-y-1 hover:border-green-600/40 hover:bg-[var(--surface)]"
               >
                 Explore community
-                <ArrowRight size={18} />
+                <ArrowRight
+                  size={18}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
               </Link>
             </div>
 
@@ -133,10 +177,10 @@ export default function Home() {
                 Grow together
               </div>
             </div>
-          </div>
+          </Reveal>
 
           {/* CODE VISUAL */}
-          <div className="relative">
+          <Reveal direction="right" delay={0.15} className="relative">
             <div className="absolute -inset-5 rounded-[2rem] bg-green-500/10 blur-2xl" />
 
             <div className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-2xl">
@@ -170,28 +214,19 @@ export default function Home() {
                   <p>
                     <span className="text-green-600">cout</span>
                     {" << "}
-                    <span className="text-orange-500">
-                      &quot;Think.&quot;
-                    </span>
-                    ;
+                    <span className="text-orange-500">&quot;Think.&quot;</span>;
                   </p>
 
                   <p>
                     <span className="text-green-600">cout</span>
                     {" << "}
-                    <span className="text-orange-500">
-                      &quot;Build.&quot;
-                    </span>
-                    ;
+                    <span className="text-orange-500">&quot;Build.&quot;</span>;
                   </p>
 
                   <p>
                     <span className="text-green-600">cout</span>
                     {" << "}
-                    <span className="text-orange-500">
-                      &quot;Innovate.&quot;
-                    </span>
-                    ;
+                    <span className="text-orange-500">&quot;Innovate.&quot;</span>;
                   </p>
 
                   <p>
@@ -210,11 +245,13 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="absolute -bottom-7 -left-7 hidden rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 shadow-xl sm:block">
+            {/* FLOATING BADGE */}
+            <div className="absolute -bottom-24 left-0 z-10 hidden rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 shadow-xl sm:block">
               <div className="flex items-center gap-3">
                 <div className="rounded-lg bg-green-600/10 p-3 text-green-600">
                   <Cpu size={22} />
                 </div>
+
                 <div>
                   <p className="font-bold">Ideas to Innovation</p>
                   <p className="text-xs text-[var(--muted)]">
@@ -223,72 +260,48 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* ABOUT SECTION */}
       <section
         id="about"
-        className="border-y border-[var(--border)] bg-[var(--surface)]/50 px-6 py-24 lg:px-10"
+        className="relative px-6 py-28 lg:px-10"
       >
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-            <div>
-              <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-green-600">
-                Who we are
-              </p>
+        <Reveal className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">
+          <div>
+            <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-green-600">
+              Who we are
+            </p>
 
-              <h2 className="text-4xl font-black tracking-tight sm:text-5xl">
-                More than a club.
-                <br />
-                A place to <span className="text-green-600">grow.</span>
-              </h2>
+            <h2 className="text-4xl font-black tracking-tight sm:text-5xl">
+              More than a club.
+              <br />
+              A place to <span className="text-green-600">grow.</span>
+            </h2>
 
-              <p className="mt-7 max-w-xl leading-8 text-[var(--muted)]">
-                SuperComputing Club is a technical community at Ramdeobaba
-                University where students come together to explore computing,
-                exchange ideas and develop practical skills.
-              </p>
+            <p className="mt-7 max-w-xl leading-8 text-[var(--muted)]">
+              SuperComputing Club is a technical community at Ramdeobaba
+              University where students come together to explore computing,
+              exchange ideas and develop practical skills.
+            </p>
 
-              <p className="mt-4 max-w-xl leading-8 text-[var(--muted)]">
-                Whether you are writing your first program or exploring
-                advanced computing concepts, there is always something new
-                to learn and someone to learn with.
-              </p>
-            </div>
+            <p className="mt-4 max-w-xl leading-8 text-[var(--muted)]">
+              Whether you are writing your first program or exploring
+              advanced computing concepts, there is always something new
+              to learn and someone to learn with.
+            </p>
+          </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                {
-                  icon: Lightbulb,
-                  title: "Curiosity",
-                  description: "Ask questions. Explore possibilities.",
-                },
-                {
-                  icon: Users,
-                  title: "Community",
-                  description: "Learn from people around you.",
-                },
-                {
-                  icon: Code2,
-                  title: "Innovation",
-                  description: "Turn ideas into working solutions.",
-                },
-                {
-                  icon: Rocket,
-                  title: "Growth",
-                  description: "Keep improving, one step at a time.",
-                },
-              ].map((item) => {
-                const Icon = item.icon;
+          <div className="grid gap-4 sm:grid-cols-2">
+            {values.map((item, index) => {
+              const Icon = item.icon;
 
-                return (
-                  <div
-                    key={item.title}
-                    className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-7 transition hover:-translate-y-1 hover:border-green-600/40"
-                  >
-                    <div className="mb-5 inline-flex rounded-xl bg-green-600/10 p-3 text-green-600">
+              return (
+                <Reveal key={item.title} delay={index * 0.08}>
+                  <div className="group h-full rounded-2xl border border-[var(--border)] bg-[var(--card)]/80 p-7 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-green-600/40 hover:shadow-xl hover:shadow-green-600/5">
+                    <div className="mb-5 inline-flex rounded-xl bg-green-600/10 p-3 text-green-600 transition-all duration-300 group-hover:bg-green-600 group-hover:text-white">
                       <Icon size={24} />
                     </div>
 
@@ -298,17 +311,17 @@ export default function Home() {
                       {item.description}
                     </p>
                   </div>
-                );
-              })}
-            </div>
+                </Reveal>
+              );
+            })}
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* DOMAINS SECTION */}
-      <section id="domains" className="px-6 py-24 lg:px-10">
+      <section id="domains" className="relative px-6 py-28 lg:px-10">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <Reveal className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div>
               <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-green-600">
                 What we explore
@@ -326,48 +339,48 @@ export default function Home() {
 
             <Link
               href="#community"
-              className="inline-flex items-center gap-2 font-semibold text-green-600 transition hover:gap-4"
+              className="group inline-flex items-center gap-2 font-semibold text-green-600 transition-all duration-300 hover:gap-4"
             >
-              Learn with us <ArrowRight size={18} />
+              Learn with us
+              <ArrowRight size={18} />
             </Link>
-          </div>
+          </Reveal>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {domains.map((domain, index) => {
               const Icon = domain.icon;
 
               return (
-                <div
-                  key={domain.title}
-                  className="group rounded-2xl border border-[var(--border)] bg-[var(--card)] p-7 transition hover:-translate-y-2 hover:border-green-600/50 hover:shadow-xl"
-                >
-                  <div className="mb-8 flex items-center justify-between">
-                    <div className="rounded-xl bg-green-600/10 p-3 text-green-600 transition group-hover:bg-green-600 group-hover:text-white">
-                      <Icon size={25} />
+                <Reveal key={domain.title} delay={index * 0.08}>
+                  <div className="group h-full rounded-2xl border border-[var(--border)] bg-[var(--card)]/80 p-7 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-green-600/50 hover:shadow-xl hover:shadow-green-600/10">
+                    <div className="mb-8 flex items-center justify-between">
+                      <div className="rounded-xl bg-green-600/10 p-3 text-green-600 transition-all duration-300 group-hover:scale-110 group-hover:bg-green-600 group-hover:text-white">
+                        <Icon size={25} />
+                      </div>
+
+                      <span className="font-mono text-xs text-[var(--muted)]">
+                        0{index + 1}
+                      </span>
                     </div>
 
-                    <span className="font-mono text-xs text-[var(--muted)]">
-                      0{index + 1}
-                    </span>
+                    <h3 className="text-xl font-bold">{domain.title}</h3>
+
+                    <p className="mt-4 min-h-24 text-sm leading-7 text-[var(--muted)]">
+                      {domain.description}
+                    </p>
+
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {domain.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full bg-[var(--surface)] px-3 py-1.5 text-xs font-medium text-[var(--muted)] transition-colors duration-300 group-hover:bg-green-600/10"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-
-                  <h3 className="text-xl font-bold">{domain.title}</h3>
-
-                  <p className="mt-4 min-h-24 text-sm leading-7 text-[var(--muted)]">
-                    {domain.description}
-                  </p>
-
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {domain.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full bg-[var(--surface)] px-3 py-1.5 text-xs font-medium text-[var(--muted)]"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                </Reveal>
               );
             })}
           </div>
@@ -377,10 +390,10 @@ export default function Home() {
       {/* ACTIVITIES SECTION */}
       <section
         id="activities"
-        className="bg-[var(--surface)]/50 px-6 py-24 lg:px-10"
+        className="relative px-6 py-28 lg:px-10"
       >
         <div className="mx-auto max-w-7xl">
-          <div className="mb-14 max-w-2xl">
+          <Reveal className="mb-14 max-w-2xl">
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-green-600">
               Learn by doing
             </p>
@@ -393,33 +406,32 @@ export default function Home() {
               Explore, experiment and collaborate through activities that
               bring technology closer to you.
             </p>
-          </div>
+          </Reveal>
 
           <div className="grid gap-6 md:grid-cols-3">
-            {activities.map((activity) => {
+            {activities.map((activity, index) => {
               const Icon = activity.icon;
 
               return (
-                <div
-                  key={activity.number}
-                  className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-8"
-                >
-                  <div className="mb-8 flex items-center justify-between">
-                    <div className="rounded-xl bg-green-600/10 p-3 text-green-600">
-                      <Icon size={25} />
+                <Reveal key={activity.number} delay={index * 0.1}>
+                  <div className="group h-full rounded-2xl border border-[var(--border)] bg-[var(--card)]/80 p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-green-600/40 hover:shadow-xl hover:shadow-green-600/5">
+                    <div className="mb-8 flex items-center justify-between">
+                      <div className="rounded-xl bg-green-600/10 p-3 text-green-600 transition-all duration-300 group-hover:scale-110 group-hover:bg-green-600 group-hover:text-white">
+                        <Icon size={25} />
+                      </div>
+
+                      <span className="font-mono text-sm text-[var(--muted)]">
+                        /{activity.number}
+                      </span>
                     </div>
 
-                    <span className="font-mono text-sm text-[var(--muted)]">
-                      /{activity.number}
-                    </span>
+                    <h3 className="text-xl font-bold">{activity.title}</h3>
+
+                    <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
+                      {activity.description}
+                    </p>
                   </div>
-
-                  <h3 className="text-xl font-bold">{activity.title}</h3>
-
-                  <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                    {activity.description}
-                  </p>
-                </div>
+                </Reveal>
               );
             })}
           </div>
@@ -427,8 +439,8 @@ export default function Home() {
       </section>
 
       {/* TEAM SECTION */}
-      <section id="team" className="px-6 py-24 lg:px-10">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">
+      <section id="team" className="relative px-6 py-28 lg:px-10">
+        <Reveal className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">
           <div>
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-green-600">
               The people behind the ideas
@@ -447,14 +459,16 @@ export default function Home() {
 
             <Link
               href="#community"
-              className="mt-8 inline-flex items-center gap-2 font-semibold text-green-600 transition hover:gap-4"
+              className="group mt-8 inline-flex items-center gap-2 font-semibold text-green-600 transition-all duration-300 hover:gap-4"
             >
               Become part of the community
               <ArrowRight size={18} />
             </Link>
           </div>
 
-          <div className="relative rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-10 sm:p-14">
+          <div className="group relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]/70 p-10 backdrop-blur-sm transition-all duration-500 hover:border-green-600/40 hover:shadow-2xl hover:shadow-green-600/5 sm:p-14">
+            <div className="absolute -right-8 -top-8 h-48 w-48 rounded-full bg-green-500/10 blur-3xl transition-transform duration-700 group-hover:scale-150" />
+
             <div className="absolute right-8 top-8 text-green-600/20">
               <Users size={90} />
             </div>
@@ -476,16 +490,15 @@ export default function Home() {
               </p>
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* COMMUNITY PLATFORM SECTION */}
-      <section
-        id="community"
-        className="px-6 pb-24 lg:px-10"
-      >
-        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-[#101b13] px-8 py-16 text-white sm:px-14 lg:py-24">
+      <section id="community" className="px-6 pb-28 lg:px-10">
+        <Reveal className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-[#101b13] px-8 py-16 text-white shadow-2xl shadow-green-950/10 sm:px-14 lg:py-24">
           <div className="pointer-events-none absolute -right-20 -top-32 h-96 w-96 rounded-full bg-green-500/20 blur-[100px]" />
+
+          <div className="pointer-events-none absolute -bottom-40 -left-20 h-80 w-80 rounded-full bg-emerald-500/10 blur-[100px]" />
 
           <div className="relative grid gap-12 lg:grid-cols-2 lg:items-center">
             <div>
@@ -510,10 +523,13 @@ export default function Home() {
               <div className="mt-9">
                 <Link
                   href="#home"
-                  className="inline-flex items-center gap-3 rounded-xl bg-green-500 px-7 py-4 font-semibold text-white transition hover:bg-green-600"
+                  className="group inline-flex items-center gap-3 rounded-xl bg-green-500 px-7 py-4 font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-green-600 hover:shadow-lg hover:shadow-green-500/20"
                 >
                   Explore the club
-                  <ArrowUpRight size={18} />
+                  <ArrowUpRight
+                    size={18}
+                    className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+                  />
                 </Link>
               </div>
             </div>
@@ -547,7 +563,7 @@ export default function Home() {
                 ].map((item) => (
                   <div
                     key={item}
-                    className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-4"
+                    className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-4 transition-all duration-300 hover:translate-x-1 hover:border-green-500/30 hover:bg-white/[0.08]"
                   >
                     <div className="rounded-full bg-green-500/20 p-1 text-green-400">
                       <ChevronRight size={15} />
@@ -559,7 +575,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* FOOTER */}
