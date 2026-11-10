@@ -1,0 +1,245 @@
+// SuperComputing Club - Database Schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// ─── ENUMS ──────────────────────────────────────────────
+
+enum UserRole {
+  STUDENT
+  CLUB_MEMBER
+  ADMIN
+}
+
+enum QueryVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum QueryStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum AssignmentStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum NotificationType {
+  NEW_ANSWER
+  QUERY_ASSIGNED
+  QUERY_STATUS_CHANGED
+  ANSWER_ACCEPTED
+}
+
+enum QueryActivityType {
+  CREATED
+  UPDATED
+  STATUS_CHANGED
+  ASSIGNED
+  ANSWER_ADDED
+  ANSWER_ACCEPTED
+  CLOSED
+  REOPENED
+}
+
+// ─── INSTITUTION ───────────────────────────────────────
+
+model Institution {
+  id          String   @id @default(cuid())
+  name        String
+  emailDomain String   @unique
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users User[]
+}
+
+// ─── USER ──────────────────────────────────────────────
+
+model User {
+  id              String   @id @default(cuid())
+  name            String
+  email           String   @unique
+  googleId        String   @unique
+  imageUrl        String?
+  isEmailVerified Boolean  @default(false)
+  role            UserRole @default(STUDENT)
+
+  institutionId String
+  institution   Institution @relation(fields: [institutionId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  queries                Query[]
+  answers                Answer[]
+  assignedAssignments    Assignment[]    @relation("Assignee")
+  createdAssignments     Assignment[]    @relation("Assigner")
+  uploadedAttachments    Attachment[]
+  notificationsReceived  Notification[]  @relation("NotificationRecipient")
+  notificationsTriggered Notification[]  @relation("NotificationActor")
+  activities             QueryActivity[]
+}
+
+// ─── CATEGORY ──────────────────────────────────────────
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?  @db.Text
+  createdAt   DateTime @default(now())
+
+  queries Query[]
+}
+
+// ─── QUERY ─────────────────────────────────────────────
+
+model Query {
+  id         String          @id @default(cuid())
+  title      String
+  body       String          @db.Text
+  visibility QueryVisibility @default(PUBLIC)
+  status     QueryStatus     @default(OPEN)
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  answers       Answer[]
+  assignments   Assignment[]
+  attachments   Attachment[]
+  activities    QueryActivity[]
+  notifications Notification[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([authorId])
+  @@index([categoryId])
+  @@index([visibility, status, createdAt])
+}
+
+// ─── ANSWER ────────────────────────────────────────────
+
+model Answer {
+  id         String  @id @default(cuid())
+  body       String  @db.Text
+  isAccepted Boolean @default(false)
+
+  queryId String
+  query   Query  @relation(fields: [queryId], references: [id], onDelete: Cascade)
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  attachments Attachment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([queryId, createdAt])
+  @@index([authorId])
+}
+
+// ─── ASSIGNMENT ────────────────────────────────────────
+
+model Assignment {
+  id     String           @id @default(cuid())
+  status AssignmentStatus @default(ACTIVE)
+  note   String?          @db.Text
+  dueAt  DateTime?
+
+  queryId String
+  query   Query  @relation(fields: [queryId], references: [id], onDelete: Cascade)
+
+  assignedToId String
+  assignedTo   User   @relation("Assignee", fields: [assignedToId], references: [id])
+
+  assignedById String
+  assignedBy   User   @relation("Assigner", fields: [assignedById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([queryId, status])
+  @@index([assignedToId, status])
+}
+
+// ─── ATTACHMENT ────────────────────────────────────────
+
+model Attachment {
+  id       String @id @default(cuid())
+  fileName String
+  fileUrl  String
+  mimeType String
+  fileSize Int
+
+  uploadedById String
+  uploadedBy   User   @relation(fields: [uploadedById], references: [id])
+
+  queryId String?
+  query   Query?  @relation(fields: [queryId], references: [id], onDelete: Cascade)
+
+  answerId String?
+  answer   Answer? @relation(fields: [answerId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([queryId])
+  @@index([answerId])
+}
+
+// ─── NOTIFICATION ──────────────────────────────────────
+
+model Notification {
+  id      String           @id @default(cuid())
+  type    NotificationType
+  message String           @db.Text
+  readAt  DateTime?
+
+  recipientId String
+  recipient   User   @relation("NotificationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+
+  actorId String?
+  actor   User?   @relation("NotificationActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  queryId String?
+  query   Query?  @relation(fields: [queryId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([recipientId, readAt, createdAt])
+}
+
+// ─── QUERY ACTIVITY ────────────────────────────────────
+
+model QueryActivity {
+  id   String            @id @default(cuid())
+  type QueryActivityType
+
+  metadata Json?
+
+  queryId String
+  query   Query  @relation(fields: [queryId], references: [id], onDelete: Cascade)
+
+  actorId String?
+  actor   User?   @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([queryId, createdAt])
+}

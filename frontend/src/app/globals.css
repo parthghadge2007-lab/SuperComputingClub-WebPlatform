@@ -1,0 +1,81 @@
+
+@import "tailwindcss";
+
+/* =================================
+   SUPERC﻿OMPUTING CLUB DESIGN SYSTEM
+================================= */
+
+:root {
+  --background: #f7faf8;
+  --foreground: #17231b;
+
+  --card: #ffffff;
+  --surface: #eaf4ed;
+
+  --primary: #15803d;
+  --primary-hover: #166534;
+
+  --border: #dce7df;
+  --muted: #647469;
+
+  --radius: 12px;
+}
+
+.dark {
+  --background: #090d0b;
+  --foreground: #f1f5f2;
+
+  --card: #14231b;
+  --surface: #1d3025;
+
+  --primary: #16a34a;
+  --primary-hover: #22c55e;
+
+  --border: #294033;
+  --muted: #a3b3a8;
+}
+
+/* Base styles */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Reusable container */
+
+.container {
+  width: min(1280px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+/* Selection */
+
+::selection {
+  background: #86efac;
+  color: #090d0b;
+}

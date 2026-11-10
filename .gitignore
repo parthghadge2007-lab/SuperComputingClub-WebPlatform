@@ -13,3 +13,18 @@ skills-lock.json
 
 # TypeScript build cache
 *.tsbuildinfo
+
+# Build artefacts (optional)
+.next/
+dist/
+build/
+
+# Env files (keep example only)
+.env
+.env.*
+!.env.example
+
+# Logs / coverage
+coverage/
+*.log
+.DS_Store
