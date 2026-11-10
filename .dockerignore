@@ -1,0 +1,15 @@
+node_modules
+dist
+.git
+.agents
+.claude
+.windsurf
+.github
+backend
+frontend
+test
+.env
+.env.*
+*.log
+*.tsbuildinfo
+npm-debug.log

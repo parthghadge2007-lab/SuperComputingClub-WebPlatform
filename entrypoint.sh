@@ -1,8 +1,11 @@
 #!/bin/sh
-# Wait for DB to be ready (optional). You can install wait-on if desired.
-# npx wait-on "$DATABASE_URL"
-# Run Prisma migrations
-npx prisma migrate deploy
-# Start the NestJS app
-node dist/main.js
 
+if [ -n "$DATABASE_URL" ] && [ "$DATABASE_URL" != "mysql://placeholder:placeholder@localhost:3306/placeholder" ]; then
+  echo "Applying database migrations..."
+  npx prisma migrate deploy || echo "Warning: Migration failed, continuing boot..."
+else
+  echo "Placeholder or no DATABASE_URL configured. Skipping migrations."
+fi
+
+echo "Starting NestJS application..."
+exec node dist/main.js

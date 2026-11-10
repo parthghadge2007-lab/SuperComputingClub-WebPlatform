@@ -1,17 +1,25 @@
-# Use official Node image
-FROM node:20-alpine AS builder
+# Multi-stage build for NestJS production
+FROM node:22-alpine AS builder
 WORKDIR /app
+
 COPY package*.json ./
-RUN npm ci
+COPY prisma ./prisma/
+RUN npm install
+RUN npx prisma generate
 COPY . .
 RUN npm run build
 
-FROM node:20-alpine
+# Production runtime stage
+FROM node:22-alpine
 WORKDIR /app
+
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/dist ./dist
-EXPOSE 3001
-COPY entrypoint.sh /app/
-ENTRYPOINT ["/app/entrypoint.sh"]
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
+ENV PORT=3001
+EXPOSE 3001
+ENTRYPOINT ["/app/entrypoint.sh"]
